@@ -5,10 +5,16 @@ using ProcessHub.Repositories.Interfaces;
 using ProcessHub.Services;
 using ProcessHub.Services.Interfaces;
 using ProcessHub.Middleware;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

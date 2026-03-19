@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using ProcessHub.Exceptions;
+using FluentValidation;
 
 namespace ProcessHub.Middleware
 {
@@ -42,6 +43,12 @@ namespace ProcessHub.Middleware
                 case BusinessException:
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
                     errorResponse.Message = exception.Message;
+                    break;
+
+                case ValidationException ex:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    errorResponse.Message = "Validation failed";
+                    errorResponse.Details = string.Join(" | ", ex.Errors.Select(e => e.ErrorMessage));
                     break;
 
                 default:
