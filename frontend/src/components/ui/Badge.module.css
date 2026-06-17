@@ -1,0 +1,47 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.active {
+  background-color: rgba(217, 119, 6, 0.15);
+  color: var(--color-text-primary);
+}
+.active .dot {
+  background-color: var(--color-primary);
+}
+
+.inactive {
+  background-color: var(--color-border);
+  color: var(--color-text-secondary);
+}
+.inactive .dot {
+  background-color: var(--color-text-secondary);
+}
+
+.warning {
+  background-color: var(--color-warning-bg);
+  color: var(--color-text-primary);
+}
+.warning .dot {
+  background-color: var(--color-warning);
+}
+
+.error {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+}
+.error .dot {
+  background-color: var(--color-error);
+}

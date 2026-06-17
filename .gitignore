@@ -104,3 +104,7 @@ secrets.json
 Migrations/*Designer.cs
 Migrations/*.resx
 
+# =========================
+# Desenvolvimento Front-end
+# =========================
+referencias_design/
