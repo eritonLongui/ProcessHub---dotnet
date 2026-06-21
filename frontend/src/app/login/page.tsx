@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Network, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
@@ -9,6 +10,13 @@ import styles from './login.module.css';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Navegação mockada temporária para passar da tela de login
+    router.push('/clients');
+  };
 
   return (
     <div className={styles.container}>
@@ -23,7 +31,7 @@ export default function LoginPage() {
       <Card className={styles.card}>
         <h2 className={styles.cardTitle}>Sign In</h2>
         
-        <form className={styles.form} onSubmit={(e) => e.preventDefault()}>
+        <form className={styles.form} onSubmit={handleLogin}>
           <div className={styles.inputGroup}>
             <Input 
               label="Email Address" 
