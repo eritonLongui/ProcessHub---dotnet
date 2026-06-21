@@ -7,15 +7,36 @@ import { Card } from '@/components/ui/Card';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import styles from './login.module.css';
+import { fetchApi } from '@/lib/api';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Navegação mockada temporária para passar da tela de login
-    router.push('/clients');
+    setError('');
+    setLoading(true);
+    
+    try {
+      // 1. Envia os dados para o backend C#
+      const response = await fetchApi<{ token: string }>('/Auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password })
+      });
+      
+      // 2. Salva o token JWT e redireciona
+      localStorage.setItem('token', response.token);
+      router.push('/clients');
+    } catch (err: any) {
+      setError("Email ou senha inválidos. " + err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,6 +59,8 @@ export default function LoginPage() {
               type="email" 
               placeholder="admin@enterprise.com"
               icon={<Mail size={18} />}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           
@@ -48,6 +71,8 @@ export default function LoginPage() {
                 type={showPassword ? "text" : "password"} 
                 placeholder="••••••••"
                 icon={<Lock size={18} />}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <button 
                 type="button"
@@ -67,8 +92,10 @@ export default function LoginPage() {
             <a href="#" className={styles.forgotLink}>Forgot password?</a>
           </div>
 
-          <Button type="submit" fullWidth className={styles.submitButton}>
-            Sign In
+          {error && <div style={{ color: 'var(--color-error)', fontSize: '14px', marginTop: '8px' }}>{error}</div>}
+
+          <Button type="submit" fullWidth className={styles.submitButton} disabled={loading}>
+            {loading ? 'Entrando...' : 'Sign In'}
           </Button>
           
           <div className={styles.footer}>
