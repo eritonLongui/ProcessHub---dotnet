@@ -24,13 +24,19 @@ export default function LoginPage() {
     
     try {
       // 1. Envia os dados para o backend C#
-      const response = await fetchApi<{ token: string }>('/Auth/login', {
+      const response = await fetchApi<any>('/Auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password })
       });
       
-      // 2. Salva o token JWT e redireciona
-      localStorage.setItem('token', response.token);
+      // 2. Salva o token JWT (tratando se o C# retornou 'token' ou 'Token')
+      const jwt = response.token || response.Token;
+      
+      if (!jwt) {
+        throw new Error("Token não encontrado na resposta da API.");
+      }
+
+      localStorage.setItem('token', jwt);
       router.push('/clients');
     } catch (err: any) {
       setError("Email ou senha inválidos. " + err.message);
